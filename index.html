@@ -34,30 +34,65 @@
       }
     ];
 
+      
+      
+    
+  
+      
     window.onload = function () {
       var sortByNameButton = document.getElementById('sort-by-name-button');
       sortByNameButton.addEventListener('click', sortProductsByName);
 
       var sortByPriceButton = document.getElementById('sort-by-price-button');
       sortByPriceButton.addEventListener('click', sortProductsByPrice);
+        
+        var sortByDescriptionButton = document.getElementById('sort-by-description-button');
+      sortByDescriptionButton.addEventListener('click', sortProductsByDescription);
+        
+
 
       createProducts();
     }
 
+        
+    function sortProductsByDescription() {
+      products.sort(compareDescription);
+      recreateProducts();
+        var sortByText = document.getElementById('sort-by-text');
+       // sortByText.textContent = 'Sorted by Description';
+        sortByText.innerHTML = 'Sorted by Description';
+    }
+    
+    
     function sortProductsByName() {
       products.sort(compareNames);
       recreateProducts();
+        var sortByText = document.getElementById('sort-by-text');
+        sortByText.textContent = 'Sorted by Name';
     }
 
     function sortProductsByPrice() {
       products.sort(comparePrices);
       recreateProducts();
+        var sortByText = document.getElementById('sort-by-text');
+        sortByText.textContent = 'Sorted by Price';
     }
 
     function recreateProducts() {
       removeProducts();
       createProducts();
     }
+      
+    function compareDescription(a, b) {
+      if (a.description < b.description) {
+        return -1;
+      }
+      if (a.description > b.description) {
+        return 1;
+      }
+      // a must be equal to b
+      return 0;
+    }  
 
     function compareNames(a, b) {
       if (a.name < b.name) {
@@ -100,23 +135,33 @@
 
       var productPriceElement = document.createElement('small');
       productPriceElement.setAttribute('class', 'product-price');
-      productPriceElement.textContent = '$' + product.price;
+      productPriceElement.textContent = ' $' + product.price;
 
       var productPhotoElement = document.createElement('img');
       productPhotoElement.setAttribute('src', product.photo);
       productPhotoElement.setAttribute('class', 'product-photo');
+        
+        var productButtonElement = document.createElement('button');
+        var text = document.createTextNode("REMOVE");
+        productButtonElement.appendChild(text);
+      productButtonElement.setAttribute('class', 'btn btn-default');
+        productButtonElement.addEventListener('click', removeProducts); 
+        
 
       productContainerElement.appendChild(productNameElement);
+        productNameElement.appendChild(productPriceElement);
       productContainerElement.appendChild(productPhotoElement);
-      productContainerElement.appendChild(productDescriptionElement); 
-      productContainerElement.appendChild(productPriceElement);
-
+      productContainerElement.appendChild(productDescriptionElement);
+        productContainerElement.appendChild(productButtonElement);
+      
       var productsElement = document.getElementById('products');
       productsElement.appendChild(productContainerElement);
     }
 
     function removeProducts() {
       var productsElement = document.getElementById('products');
+        productButtonElement.auctions.splice(productContainerElement);
+
 
       while (productsElement.lastChild) {
         productsElement.removeChild(productsElement.lastChild);
@@ -141,8 +186,12 @@
 <body>
 
   <div class="container">
+      <span>
     <button class="btn btn-default" id="sort-by-name-button">Sort by name</button>
     <button class="btn btn-default" id="sort-by-price-button">Sort by price</button>
+      <button class="btn btn-default" id="sort-by-description-button">Sort by description</button>
+      <p id='sort-by-text'></p>
+          </span>
     <div id="products"></div>
   </div>
 
