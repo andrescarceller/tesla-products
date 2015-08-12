@@ -35,11 +35,16 @@
     ];
 
     window.onload = function () {
+
+
       var sortByNameButton = document.getElementById('sort-by-name-button');
       sortByNameButton.addEventListener('click', sortProductsByName);
 
       var sortByPriceButton = document.getElementById('sort-by-price-button');
       sortByPriceButton.addEventListener('click', sortProductsByPrice);
+
+      var sortByDescriptionButton = document.getElementById('sort-by-description-button');
+      sortByDescriptionButton.addEventListener('click', sortProductsByDescription);
 
       createProducts();
     }
@@ -51,6 +56,11 @@
 
     function sortProductsByPrice() {
       products.sort(comparePrices);
+      recreateProducts();
+    }
+
+    function sortProductsByDescription() {
+      products.sort(compareDescriptions);
       recreateProducts();
     }
 
@@ -83,6 +93,18 @@
       return 0;
     }
 
+    function compareDescriptions(a, b) {
+      if (a.description < b.description) {
+          return -1;
+      }
+      if (a.description > b.description) {
+        return 1;
+      }
+
+      // a must be equal to b
+      return 0;
+    }
+
     function createProducts() {
       products.forEach(createProductElement);
     }
@@ -100,7 +122,7 @@
 
       var productPriceElement = document.createElement('small');
       productPriceElement.setAttribute('class', 'product-price');
-      productPriceElement.textContent = '$' + product.price;
+      productPriceElement.textContent = " " + '$' + product.price;
 
       var productPhotoElement = document.createElement('img');
       productPhotoElement.setAttribute('src', product.photo);
@@ -109,7 +131,7 @@
       productContainerElement.appendChild(productNameElement);
       productContainerElement.appendChild(productPhotoElement);
       productContainerElement.appendChild(productDescriptionElement); 
-      productContainerElement.appendChild(productPriceElement);
+      productNameElement.appendChild(productPriceElement);
 
       var productsElement = document.getElementById('products');
       productsElement.appendChild(productContainerElement);
@@ -143,6 +165,7 @@
   <div class="container">
     <button class="btn btn-default" id="sort-by-name-button">Sort by name</button>
     <button class="btn btn-default" id="sort-by-price-button">Sort by price</button>
+    <button class="btn btn-default" id="sort-by-description-button">Sort by description</button>
     <div id="products"></div>
   </div>
 
