@@ -5,6 +5,11 @@
   <title>Tesla Products</title>
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    
+    
   <script>
     
     var products = [
@@ -120,10 +125,12 @@
 
     function createProducts() {
       products.forEach(createProductElement);
+        //this could be swapped for a for loop
     }
 
     function createProductElement(product) {
       var productContainerElement = document.createElement('div');
+        productContainerElement.setAttribute('id', product.name);
       
       var productNameElement = document.createElement('h3');
       productNameElement.setAttribute('class', 'product-name');
@@ -145,7 +152,11 @@
         var text = document.createTextNode("REMOVE");
         productButtonElement.appendChild(text);
       productButtonElement.setAttribute('class', 'btn btn-default');
-        productButtonElement.addEventListener('click', removeProducts); 
+        
+        
+        productButtonElement.addEventListener('click', function () {
+        removeProduct(product);                                     
+        }); 
         
 
       productContainerElement.appendChild(productNameElement);
@@ -153,20 +164,26 @@
       productContainerElement.appendChild(productPhotoElement);
       productContainerElement.appendChild(productDescriptionElement);
         productContainerElement.appendChild(productButtonElement);
+
       
       var productsElement = document.getElementById('products');
       productsElement.appendChild(productContainerElement);
     }
 
-    function removeProducts() {
+    
+      function removeProduct(whatproduct) {
       var productsElement = document.getElementById('products');
-        productButtonElement.auctions.splice(productContainerElement);
-
-
-      while (productsElement.lastChild) {
+          var productspecificElement = document.getElementById(whatproduct.name);
+        productsElement.removeChild(productspecificElement);
+          }
+          
+      
+      function removeProducts() {
+      var productsElement = document.getElementById('products');
+          while (productsElement.lastChild) {
         productsElement.removeChild(productsElement.lastChild);
+          }
       }
-    }
 
   </script>
 
