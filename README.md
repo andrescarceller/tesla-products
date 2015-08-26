@@ -1,5 +1,11 @@
 # Tesla Products
 
+## Problem
+
+Create a list of products that user can sort and remove items from.
+
+## Solutions
+
 1. [index.html](https://github.com/frontendeducation/tesla-products/blob/art/index.html) - plain JavaScript solution.
 2. [index-jquery.html](https://github.com/frontendeducation/tesla-products/blob/art/index-jquery.html) - jQuery solution.
 3. [index-jquery-ui.html](https://github.com/frontendeducation/tesla-products/blob/art/index-jquery-ui.html) - jQuery UI and Google Maps solution.
