@@ -2,6 +2,7 @@
 
 1. [index.html](https://github.com/frontendeducation/tesla-products/blob/art/index.html) - plain JavaScript solution.
 2. [index-jquery.html](https://github.com/frontendeducation/tesla-products/blob/art/index-jquery.html) - jQuery solution.
+3. [index-jquery-ui.html](https://github.com/frontendeducation/tesla-products/blob/art/index-jquery-ui.html) - jQuery UI and Google Maps solution.
 
 ## The Challenge
 
