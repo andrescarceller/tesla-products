@@ -6,7 +6,12 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
   <script>
+
+    // Data (4 objects) for our JavaScript application stored in array with the name 'products'
     var products = [
       {
         id: 1,
@@ -38,15 +43,19 @@
       }
     ];
 
-    window.onload = function () {
-      var sortByNameButton = document.getElementById('sort-by-name-button');
-      sortByNameButton.addEventListener('click', sortProductsByName);
+    // Read more about $(readyCallback) here: https://learn.jquery.com/using-jquery-core/document-ready/
+    $(function() {
+      // Create 'Sort by name' button element
+      var sortByNameButton = $('#sort-by-name-button');
+      sortByNameButton.on('click', sortProductsByName);
 
-      var sortByPriceButton = document.getElementById('sort-by-price-button');
-      sortByPriceButton.addEventListener('click', sortProductsByPrice);
+      // Create 'Sort by price' button element
+      var sortByPriceButton = $('#sort-by-price-button');
+      sortByPriceButton.on('click', sortProductsByPrice);
 
+      // Call 'createProducts' function
       createProducts();
-    }
+    });
 
     function sortProductsByName() {
       products.sort(compareNames);
@@ -88,60 +97,75 @@
     }
 
     function createProducts() {
+      // For each product object in 'products' array
+      // call `createProductElement` function and pass that object as an argument
+      // to `createProductElement` function.
       products.forEach(createProductElement);
     }
 
+    // Pass 'product' object to 'createProductElement' function
     function createProductElement(product) {
-      var productContainerElement = document.createElement('div');
-      productContainerElement.setAttribute('id', product.id);
+      // Create new 'div' element
+      var productContainerElement = $('<div></div>');
+      // Add 'id' attribute with the value from product.id
+      productContainerElement.attr('id', product.id);
 
-      var productNameElement = document.createElement('h3');
-      productNameElement.setAttribute('class', 'product-name');
-      productNameElement.textContent = product.name;
+      // Create 'h3' element
+      var productNameElement = $('<h3>' + product.name + '</h3>');
+      productNameElement.attr('class', 'product-name');
 
-      var removeButtonElement = document.createElement('button');
-      removeButtonElement.setAttribute('class', 'remove-button');
-      removeButtonElement.textContent = 'Remove';
-      removeButtonElement.addEventListener('click', function () {
+      // Create 'p' element
+      var productDescriptionElement = $('<p>' + product.description + '</p>');
+      productDescriptionElement.attr('class', 'product-description');
+
+      // Create 'small' element
+      var productPriceElement = $('<small>' + product.price + '</small>');
+      productPriceElement.attr('class', 'product-price');
+
+      // Create 'img' element
+      var productPhotoElement = $('<img />');
+      productPhotoElement.attr('src', product.photo);
+      productPhotoElement.attr('class', 'product-photo');
+
+      // Create 'button' element
+      var removeButtonElement = $('<button>Remove</button>');
+      removeButtonElement.attr('class', 'remove-button');
+      // If user clicks on 'Remove' button then call anonymous function
+      removeButtonElement.on('click', function () {
+        // Call 'removeProduct' and pass 'product' object as an argument
         removeProduct(product);
       });
 
-      var productDescriptionElement = document.createElement('p');
-      productDescriptionElement.setAttribute('class', 'product-description');
-      productDescriptionElement.textContent = product.description;
+      // Append 'productNameElement' to 'productContainerElement':
+      // div
+      //   h3
+      //   button
+      //   img
+      //   p
+      //   small
+      productContainerElement.append(productNameElement);
+      productContainerElement.append(removeButtonElement);
+      productContainerElement.append(productPhotoElement);
+      productContainerElement.append(productDescriptionElement);
+      productContainerElement.append(productPriceElement);
 
-      var productPriceElement = document.createElement('small');
-      productPriceElement.setAttribute('class', 'product-price');
-      productPriceElement.textContent = '$' + product.price;
-
-      var productPhotoElement = document.createElement('img');
-      productPhotoElement.setAttribute('src', product.photo);
-      productPhotoElement.setAttribute('class', 'product-photo');
-
-      productContainerElement.appendChild(productNameElement);
-      productContainerElement.appendChild(removeButtonElement);
-      productContainerElement.appendChild(productPhotoElement);
-      productContainerElement.appendChild(productDescriptionElement);
-      productContainerElement.appendChild(productPriceElement);
-
-      var productsElement = document.getElementById('products');
-      productsElement.appendChild(productContainerElement);
+      // Select element with id 'products':
+      var productsElement = $('#products');
+      // Append 'productContainerElement' to `productsElement`
+      productsElement.append(productContainerElement);
     }
 
     function removeProduct(product) {
-      var productsElement = document.getElementById('products');
-      var productElement = document.getElementById(product.id);
-      productsElement.removeChild(productElement);
+      // Select element with id from product.id and then remove that element
+      $('#' + product.id).remove();
     }
 
     function removeProducts() {
-      var productsElement = document.getElementById('products');
-
-      while (productsElement.lastChild) {
-        productsElement.removeChild(productsElement.lastChild);
-      }
+      // Select all divs that are child elements of #products
+      var productElements = $('#products div');
+      // Remove all selected elements
+      productElements.remove();
     }
-
   </script>
 
   <style>
