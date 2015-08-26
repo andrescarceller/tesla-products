@@ -17,3 +17,7 @@ When user slides prices slider - update selected price values, both: minimum and
 ### 3. Create a marker for each product
 
 Each product should have a marker on a map and when products are filtered - markers should be hidden.
+
+## Questions?
+
+Feel free to ask Art during our class or in our Slack channel: `#lon_jul2015_frontend`
