@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tesla Products</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmvltosFMrCkNeiYcm2v7-wGCQb-qeh28"
+  type="text/javascript"></script>
+
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+  <script>
+
+    // Google Maps API Key: AIzaSyCmvltosFMrCkNeiYcm2v7-wGCQb-qeh28
+
+    var originalProducts = [
+      {
+        id: 1,
+        name: 'Roadster',
+        description: 'The Tesla Roadster is a battery electric vehicle (BEV) sports car produced by the electric car firm Tesla Motors in California between 2008 and 2012.',
+        price: 100000,
+        photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roadster_2.5_windmills_trimmed.jpg/1920px-Roadster_2.5_windmills_trimmed.jpg'
+      },
+      {
+        id: 2,
+        name: 'Model S',
+        description: 'The Tesla Model S is a full-sized plug-in electric five-door, luxury liftback, produced by Tesla Motors.',
+        price: 70000,
+        photo: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/2013_Tesla_Model_S_%2811322176214%29_cropped.jpg'
+      },
+      {
+        id: 3,
+        name: 'Model X',
+        description: 'The Tesla Model X is a full-size crossover utility vehicle (CUV) in development by Tesla Motors.',
+        price: 85000,
+        photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Tesla_Model_X_front_view_%2816042113157%29.jpg/1600px-Tesla_Model_X_front_view_%2816042113157%29.jpg'
+      },
+      {
+        id: 4,
+        name: 'Model 3',
+        description: 'The Model 3 was previously called the Model E, and was codenamed Tesla BlueStar in the original business plan; its current name was announced on Twitter on July 16, 2014.',
+        price: 35000,
+        photo: 'http://static3.uk.businessinsider.com/image/55c4cce2dd0895d9788b45ee-1794-782/screen%20shot%202015-08-07%20at%2011.07.43%20am.png'
+      }
+    ];
+
+    // Data (4 objects) for our JavaScript application stored in array with the name 'products'
+    var products = [];
+
+    // Read more about $(readyCallback) here: https://learn.jquery.com/using-jquery-core/document-ready/
+    $(function() {
+
+      product = filterProducts(35000, 100000);
+
+      $('#slider').slider({
+        range: true,
+        min: 35000,
+        max: 100000,
+        values: [35000, 100000],
+        slide: function (event, ui) {
+          var minimum = ui.values[0];
+          var maximum = ui.values[1];
+
+          filterProducts(minimum, maximum);
+        }
+      });
+
+      // Create 'Sort by name' button element
+      var sortByNameButton = $('#sort-by-name-button');
+      sortByNameButton.on('click', sortProductsByName);
+
+      // Create 'Sort by price' button element
+      var sortByPriceButton = $('#sort-by-price-button');
+      sortByPriceButton.on('click', sortProductsByPrice);
+
+      // Call 'createProducts' function
+      createProducts();
+      initMap();
+    });
+
+    function filterProducts(minimumPrice, maximumPrice) {
+      products = originalProducts.filter(function (originalProduct) {
+        if (originalProduct.price >= minimumPrice && originalProduct.price <= maximumPrice) {
+          return true;
+        }
+
+        return false;
+      });
+
+      recreateProducts();
+    }
+
+    function initMap() {
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+          lat: 51.52349,
+          lng: -0.105587
+        },
+        zoom: 15
+      });
+
+      var marker = new google.maps.Marker({
+        position: { lat: 51.52349, lng: -0.105587 },
+        map: map,
+        title: 'Hello World!'
+      });
+    }
+
+    function sortProductsByName() {
+      products.sort(compareNames);
+      recreateProducts();
+    }
+
+    function sortProductsByPrice() {
+      products.sort(comparePrices);
+      recreateProducts();
+    }
+
+    function recreateProducts() {
+      removeProducts();
+      createProducts();
+    }
+
+    function compareNames(a, b) {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      // a must be equal to b
+      return 0;
+    }
+
+    function comparePrices(a, b) {
+      if (a.price > b.price) {
+        return -1;
+      }
+
+      if (a.price < b.price) {
+        return 1;
+      }
+
+      // a must be equal to b
+      return 0;
+    }
+
+    function createProducts() {
+      // For each product object in 'products' array
+      // call `createProductElement` function and pass that object as an argument
+      // to `createProductElement` function.
+      products.forEach(createProductElement);
+    }
+
+    // Pass 'product' object to 'createProductElement' function
+    function createProductElement(product) {
+      // Create new 'div' element
+      var productContainerElement = $('<div></div>');
+      // Add 'id' attribute with the value from product.id
+      productContainerElement.attr('id', product.id);
+
+      // Create 'h3' element
+      var productNameElement = $('<h3>' + product.name + '</h3>');
+      productNameElement.attr('class', 'product-name');
+
+      // Create 'p' element
+      var productDescriptionElement = $('<p>' + product.description + '</p>');
+      productDescriptionElement.attr('class', 'product-description');
+
+      // Create 'small' element
+      var productPriceElement = $('<small>' + product.price + '</small>');
+      productPriceElement.attr('class', 'product-price');
+
+      // Create 'img' element
+      var productPhotoElement = $('<img />');
+      productPhotoElement.attr('src', product.photo);
+      productPhotoElement.attr('class', 'product-photo');
+
+      // Create 'button' element
+      var removeButtonElement = $('<button>Remove</button>');
+      removeButtonElement.attr('class', 'remove-button');
+      // If user clicks on 'Remove' button then call anonymous function
+      removeButtonElement.on('click', function () {
+        // Call 'removeProduct' and pass 'product' object as an argument
+        removeProduct(product);
+      });
+
+      // Append elements to 'div':
+      // div
+      //   h3
+      //   button
+      //   img
+      //   p
+      //   small
+      productContainerElement.append(productNameElement);
+      productContainerElement.append(removeButtonElement);
+      productContainerElement.append(productPhotoElement);
+      productContainerElement.append(productDescriptionElement);
+      productContainerElement.append(productPriceElement);
+
+      // Select element with id 'products':
+      var productsElement = $('#products');
+      // Append 'productContainerElement' to `productsElement`
+      productsElement.append(productContainerElement);
+    }
+
+    function removeProduct(product) {
+      // Select element with id from product.id and then remove that element
+      $('#' + product.id).remove();
+    }
+
+    function removeProducts() {
+      // Select all divs that are child elements of #products
+      var productElements = $('#products div');
+      // Remove all selected elements
+      productElements.remove();
+    }
+  </script>
+
+  <style>
+  .container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+
+  .product-photo {
+    width: 300px;
+    margin: 0px 0 20px 0;
+  }
+
+  .remove-button {
+    display: block;
+  }
+
+  #slider {
+    margin: 15px 5px;
+    width: 200px;
+  }
+
+  #map {
+    width: 500px;
+    height: 500px;
+  }
+  </style>
+
+</head>
+<body>
+
+  <div class="container">
+    <div id="map"></div>
+    <h5>Price:</h5>
+    <div id="slider"></div>
+    <button class="btn btn-default" id="sort-by-name-button">Sort by name</button>
+    <button class="btn btn-default" id="sort-by-price-button">Sort by price</button>
+    <div id="products"></div>
+  </div>
+
+</body>
+</html>
